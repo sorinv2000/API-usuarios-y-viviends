@@ -1,0 +1,413 @@
+openapi: "3.0.0"
+info:
+  title: "User and Houses API"
+  version: "1.0.0"
+  description: "API for managing users and their houses"
+servers:
+  - url: "http://localhost:3000/api/v1"
+paths:
+  /users:
+    get:
+      summary: "Retrieve a list of users"
+      responses:
+        '200':
+          description: "A list of users"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/User"
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: "Create a new user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '201':
+          description: "User created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{userId}:
+    get:
+      summary: "Retrieve a single user"
+      parameters:
+        - in: "path"
+          name: "userId"
+          schema:
+            type: "string"
+          required: true
+          description: "The user ID"
+      responses:
+        '200':
+          description: "A single user"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '404':
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      summary: "Update a user partially"
+      parameters:
+        - in: "path"
+          name: "userId"
+          schema:
+            type: "string"
+          required: true
+          description: "The user ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '200':
+          description: "User updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: "Update a user completely"
+      parameters:
+        - in: "path"
+          name: "userId"
+          schema:
+            type: "string"
+          required: true
+          description: "The user ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '200':
+          description: "User updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: "Delete a user"
+      parameters:
+        - in: "path"
+          name: "userId"
+          schema:
+            type: "string"
+          required: true
+          description: "The user ID"
+      responses:
+        '204':
+          description: "User deleted"
+        '400':
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '409':
+          description: "Conflict - User has houses, cannot delete"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{userId}/houses:
+    get:
+      summary: "Retrieve all houses of a user with optional filters"
+      parameters:
+        - in: "path"
+          name: "userId"
+          schema:
+            type: "string"
+          required: true
+          description: "The user ID"
+        - in: "query"
+          name: "city"
+          schema:
+            type: "string"
+          required: false
+          description: "Filter by city"
+        - in: "query"
+          name: "street"
+          schema:
+            type: "string"
+          required: false
+          description: "Filter by street"
+        - in: "query"
+          name: "country"
+          schema:
+            type: "string"
+          description: "Filter by country"
+      responses:
+        '200':
+          description: "A list of houses"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/House"
+        '400':
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: "Create a new house for a user"
+      parameters:
+        - in: "path"
+          name: "userId"
+          schema:
+            type: "string"
+          required: true
+          description: "The user ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/House"
+      responses:
+        '201':
+          description: "House created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/House"
+        '400':
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{userId}/houses/{houseId}:
+    put:
+      summary: "Update a house of a user"
+      parameters:
+        - in: "path"
+          name: "userId"
+          schema:
+            type: "string"
+          required: true
+          description: "The user ID"
+        - in: "path"
+          name: "houseId"
+          schema:
+            type: "string"
+          required: true
+          description: "The house ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/House"
+      responses:
+        '200':
+          description: "House updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/House"
+        '400':
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: "House not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: "Delete a house of a user"
+      parameters:
+        - in: "path"
+          name: "userId"
+          schema:
+            type: "string"
+          required: true
+          description: "The user ID"
+        - in: "path"
+          name: "houseId"
+          schema:
+            type: "string"
+          required: true
+          description: "The house ID"
+      responses:
+        '204':
+          description: "House deleted"
+        '400':
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: "House not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    User:
+      type: "object"
+      required:
+        - name
+        - email
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        email:
+          type: "string"
+    House:
+      type: "object"
+      required:
+        - city
+        - street
+        - country
+      properties:
+        id:
+          type: "string"
+        userId:
+          type: "string"
+        city:
+          type: "string"
+        street:
+          type: "string"
+        country:
+          type: "string"
+    Error:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+        message:
+          type: "string"
