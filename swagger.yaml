@@ -35,6 +35,13 @@ paths:
       responses:
         '201':
           description: "User created"
+          headers:
+            X-API-Version:
+              $ref: '#/components/headers/X-API-Version'
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
           content:
             application/json:
               schema:
@@ -64,6 +71,13 @@ paths:
       responses:
         '200':
           description: "A single user"
+          headers:
+            X-API-Version:
+              $ref: '#/components/headers/X-API-Version'
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
           content:
             application/json:
               schema:
@@ -98,6 +112,13 @@ paths:
       responses:
         '200':
           description: "User updated"
+          headers:
+            X-API-Version:
+              $ref: '#/components/headers/X-API-Version'
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
           content:
             application/json:
               schema:
@@ -138,6 +159,13 @@ paths:
       responses:
         '200':
           description: "User updated"
+          headers:
+            X-API-Version:
+              $ref: '#/components/headers/X-API-Version'
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
           content:
             application/json:
               schema:
@@ -172,6 +200,13 @@ paths:
       responses:
         '204':
           description: "User deleted"
+          headers:
+            X-API-Version:
+              $ref: '#/components/headers/X-API-Version'
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
         '400':
           description: "Bad Request"
           content:
@@ -226,6 +261,13 @@ paths:
       responses:
         '200':
           description: "A list of houses"
+          headers:
+            X-API-Version:
+              $ref: '#/components/headers/X-API-Version'
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
           content:
             application/json:
               schema:
@@ -268,6 +310,13 @@ paths:
       responses:
         '201':
           description: "House created"
+          headers:
+            X-API-Version:
+              $ref: '#/components/headers/X-API-Version'
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
           content:
             application/json:
               schema:
@@ -315,6 +364,13 @@ paths:
       responses:
         '200':
           description: "House updated"
+          headers:
+            X-API-Version:
+              $ref: '#/components/headers/X-API-Version'
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
           content:
             application/json:
               schema:
@@ -355,6 +411,13 @@ paths:
       responses:
         '204':
           description: "House deleted"
+          headers:
+            X-API-Version:
+              $ref: '#/components/headers/X-API-Version'
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
         '400':
           description: "Bad Request"
           content:
@@ -374,6 +437,39 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 components:
+  headers:
+    X-API-Version:
+      description: The version of the API that generated the response
+      schema:
+        type: string
+      example: 1.0.0
+    X-Rate-Limit-Limit:
+      description: The maximum number of requests that the consumer is permitted to make in a given time window
+      schema:
+        type: integer
+        format: int32
+      example: 1000
+    X-Rate-Limit-Remaining:
+      description: The number of requests remaining in the current rate limit window
+      schema:
+        type: integer
+        format: int32
+      example: 999
+    Strict-Transport-Security:
+      description: Ensures that the browser connects to the server over HTTPS
+      schema:
+        type: string
+      example: max-age=31536000; includeSubDomains
+    Content-Security-Policy:
+      description: Helps prevent XSS attacks by specifying the sources from which content can be loaded
+      schema:
+        type: string
+      example: default-src 'self'; script-src 'self' https://apis.example.com
+    X-Content-Type-Options:
+      description: Prevents browsers from MIME-sniffing a response away from the declared content type
+      schema:
+        type: string
+      example: nosniff
   schemas:
     User:
       type: "object"
@@ -383,10 +479,13 @@ components:
       properties:
         id:
           type: "string"
+          example: "1"
         name:
           type: "string"
+          example: "Miguel"
         email:
           type: "string"
+          example: "antonio.banderas@telepizza.com"
     House:
       type: "object"
       required:
@@ -395,15 +494,20 @@ components:
         - country
       properties:
         id:
-          type: "string"
+          type: "number"
+          example: "1"
         userId:
-          type: "string"
+          type: "number"
+          example: "1"
         city:
           type: "string"
+          example: "Cadiz"
         street:
           type: "string"
+          example: "Calle Ancha"
         country:
           type: "string"
+          example : "Spain"
     Error:
       type: "object"
       properties:
